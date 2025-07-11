@@ -1,12 +1,24 @@
 "use client";
 
-import { motion } from "motion/react";
+import { motion, useScroll, useTransform } from "motion/react";
 import { useRef, useEffect } from "react";
 
 const HeroSection = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
   const videoUrl = "/media/landing-video.mp4";
   const particlesRef = useRef<HTMLDivElement>(null);
+
+  // Set up scroll-based animation
+  const { scrollY } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"],
+  });
+
+  // Create a parallax effect by moving the video at 50% of scroll speed
+  const y = useTransform(scrollY, [0, 1], [0, 0.5], {
+    clamp: false,
+  });
 
   function createParticles(particleContainer: HTMLDivElement) {
     for (let i = 0; i < 50; i++) {
@@ -40,11 +52,15 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section className="relative h-screen w-full overflow-hidden pt-16">
+    <section
+      ref={containerRef}
+      className="relative h-screen w-full overflow-hidden pt-16"
+    >
       <div className="absolute inset-0">
-        <video
+        <motion.video
           ref={videoRef}
-          className="absolute h-full w-full object-cover"
+          className="absolute h-[120%] w-full object-cover"
+          style={{ y }}
           loop
           muted
           playsInline
@@ -52,7 +68,7 @@ const HeroSection = () => {
         >
           <source src={videoUrl} type="video/mp4" />
           Your browser does not support the video tag.
-        </video>
+        </motion.video>
         {/* Subtle gradient fade at the bottom */}
         <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/80 to-transparent" />
       </div>
