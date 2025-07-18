@@ -150,11 +150,13 @@ export function ProductManagement() {
                   <AccordionContent className="px-4 pt-2 pb-4 bg-white">
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                       {categoryProducts.map((product) => (
-                        <ProductCard
-                          key={product._id}
-                          product={product}
-                          onDelete={handleDelete}
-                        />
+                        <>
+                          <ProductCard
+                            key={product._id}
+                            product={product}
+                            onDelete={handleDelete}
+                          />
+                        </>
                       ))}
                     </div>
                   </AccordionContent>

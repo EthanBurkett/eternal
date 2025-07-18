@@ -7,7 +7,11 @@ export const GET = withMiddleware<{ id: string }>(async (req, ctx) => {
     throw Errors.InternalServerError("Product model not found");
   }
 
-  const result = await ctx.models.Product.findById(ctx.params.id);
+  const params = await ctx.params;
+
+  const result = await ctx.models.Product.findById(params.id).populate(
+    "category"
+  );
 
   if (!result) {
     throw Errors.NotFound("Product not found");
@@ -19,11 +23,13 @@ export const GET = withMiddleware<{ id: string }>(async (req, ctx) => {
 export const DELETE = withMiddleware<{ id: string }>(async (req, ctx) => {
   requireStaff(req);
 
+  const params = await ctx.params;
+
   if (!ctx.models?.Product) {
     throw Errors.InternalServerError("Product model not found");
   }
 
-  const result = await ctx.models.Product.findByIdAndDelete(ctx.params.id);
+  const result = await ctx.models.Product.findByIdAndDelete(params.id);
 
   if (!result) {
     throw Errors.NotFound("Product not found");
@@ -49,7 +55,9 @@ export const PUT = withMiddleware<{ id: string }>(async (req, ctx) => {
     });
   }
 
-  const product = await ctx.models.Product.findByIdAndUpdate(ctx.params.id, {
+  const params = await ctx.params;
+
+  const product = await ctx.models.Product.findByIdAndUpdate(params.id, {
     ...isSafe.data,
     slug: isSafe.data?.name
       .toLowerCase()

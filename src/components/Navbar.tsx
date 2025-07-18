@@ -13,7 +13,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { useState } from "react";
-import { FaBook, FaPhone } from "react-icons/fa";
+import { FaBook, FaCog, FaPhone } from "react-icons/fa";
 import { FaShop } from "react-icons/fa6";
 import {
   OrganizationSwitcher,
@@ -116,6 +116,14 @@ const Navbar = () => {
                       <FaPhone />
                       <Link href="#contact">Contact</Link>
                     </li>
+                    {organization && organization.id === CLERK_STAFF_ORG_ID && (
+                      <li className="bg-white px-4 py-2 rounded-lg font-medium flex flex-row gap-2 items-center">
+                        <FaCog />
+                        <Link href="/manage">Manage Store</Link>
+                      </li>
+                    )}
+                    {organization && <OrgCard />}
+                    <UserCard />
                   </DrawerContent>
                 </DrawerContent>
               </Drawer>

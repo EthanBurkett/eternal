@@ -2,7 +2,6 @@ import { Responses } from "@/lib/api-utils";
 import { AvailableModels, withMiddleware } from "@/lib/middlewares";
 
 export const GET = withMiddleware(async (req, ctx) => {
-  // get search params
   const searchParams = req.nextUrl.searchParams;
   const models = searchParams.get("models");
 
@@ -21,7 +20,7 @@ export const GET = withMiddleware(async (req, ctx) => {
     total,
     models: models?.split(",").map((model) => ({
       name: model,
-      count: result[models.indexOf(model)] || 0,
+      count: result[models?.split(",").indexOf(model) || 0],
     })),
   });
 });
